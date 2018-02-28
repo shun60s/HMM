@@ -1,0 +1,6 @@
+/wav/*
+/spectrogram/*
+/DataSet/*
+/result/*
+*.bat
+*.pyc
