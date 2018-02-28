@@ -3,7 +3,7 @@
 ## 概要  
 
 数字の発話のメル尺度のスぺクトログラムを使って、主成分分析により特徴量の次元数を少なくして、混合分布の隠れマルコフモデル（HMM）を使って識別するもの。練習用。  
-A practice of Hidden Markov Model with Gaussian mixture emissions  
+ 
 
 [github repository](https://github.com/shun60s/HMM)
 
@@ -20,7 +20,7 @@ python make_spectrogram.py
 WAVファイルの発話の速さ（例：40だけ）の条件で排除できる。
 spectrogramディレクトリーに出力される。
 spectrogram.zipは出力された例。  
-![スペクトログラムの例](docs/Mel-scale-spectrogram.png.png)  
+![スペクトログラムの例](docs/Mel-scale-spectrogram.png)  
 
 
 ### 2.訓練用とテスト用のデータセットの作成  
