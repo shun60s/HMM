@@ -20,7 +20,7 @@ python make_spectrogram.py
 WAVファイルの発話の速さ（例：40だけ）の条件で排除できる。
 spectrogramディレクトリーに出力される。
 spectrogram.zipは出力された例。  
-![スペクトログラムの例](docs/Mel-scale-spectrogram.png)  
+![スペクトログラムの例](docs/Mel-scale-spectrogram.png.png)  
 
 
 ### 2.訓練用とテスト用のデータセットの作成  
@@ -73,8 +73,7 @@ melbank.pyは　それに記載されているライセンスに従うこと。
 
 - [Python のHMMライブラリ hmmlearn](http://hmmlearn.readthedocs.io/en/latest/tutorial.html)
 - [wav of Pannous](https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md)
-- [Python の主成分分析 scikit learn](http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html)
-- [Python のクラスタリング scikit learn](http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html)
+
 
 
 ## 免責事項　
@@ -86,5 +85,4 @@ THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABI
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  
 #### 上記はMITライセンスからの抜粋です。 
-
 

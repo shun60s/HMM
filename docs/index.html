@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<title>HMM 混合分布の隠れマルコフモデル（HMM）の練習</title>
+<meta property="og:title" content="HMM" />
+<meta property="og:locale" content="ja_JP" />
+<meta name="description" content="混合分布の隠れマルコフモデル（HMM）の練習" />
+<meta property="og:description" content="混合分布の隠れマルコフモデル（HMM）の練習" />
+<link rel="canonical" href="https://shun60s.github.io/HMM/" />
+<meta property="og:url" content="https://shun60s.github.io/HMM/" />
+<meta property="og:site_name" content="HMM" />
+
+
+    <link href="style.css" rel="stylesheet">
+    <link rel="alternate" hreflang="ja" href="https://shun60s.github.io/HMM/" />
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+
+      <h1 id="hmm">HMM</h1>
+
+<h2 id="概要">概要</h2>
+
+<p>数字の発話のメル尺度のスぺクトログラムを使って、主成分分析により特徴量の次元数を少なくして、混合分布の隠れマルコフモデル（HMM）を使って識別するもの。練習用。</p>
+
+<p><a href="https://github.com/shun60s/HMM">github repository</a></p>
+
+<h2 id="使い方">使い方</h2>
+<h3 id="1スペクトログラムの作成">1.スペクトログラムの作成</h3>
+
+<p>数字の発話（英語）のWAVEファイルをダウンロードする。  <a href="http://pannous.net/files/spoken_numbers_wav.tar">http://pannous.net/files/spoken_numbers_wav.tar</a><br />
+(データの中身の情報 <a href="https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md">https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md</a> )<br />
+wavディレクトリーに移動する。ファイル名称の中にSteffi（名前）が含まれるデータは除いた。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python make_spectrogram.py
+</code></pre></div></div>
+<p>フィルターバンクの数や、使用する周波数の幅、フレーム分析長さ（FFTの次数、シフト値）なども可変設定できる。
+WAVファイルの発話の速さ（例：40だけ）の条件で排除できる。
+spectrogramディレクトリーに出力される。<br />
+spectrogram.zipは出力された例。<br />
+<img src="Mel-scale-spectrogram.png" alt="スペクトログラムの例" /></p>
+
+<h3 id="2訓練用とテスト用のデータセットの作成">2.訓練用とテスト用のデータセットの作成</h3>
+
+<p>主成分分析を行い、寄与率を計算し、おおよその（必要となりそうな）次元数を割りだす。
+<img src="explained_variance.png" alt="寄与率" /><br />
+連続したフレームも1個のデータとして使う設定もできる。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python pca.py
+</code></pre></div></div>
+
+<p>テスト評価に使う名前を指定する。（例：TestNames=[‘Samantha’, ‘Tom’]) テスト用以外の全員が訓練用になる。<br />
+<img src="PrincipalComponentAnalysis.png" alt="主要3軸での分布" /><br />
+赤のテスト用の試料は、青の訓練用の塊と離れているので、識別が成功しそうにない様子がうかがえる。</p>
+
+<p>DataSetディレクトリーに訓練用とテスト用のデータセットが出力される。</p>
+
+<h3 id="3数字ごとの分布の様子">3.数字ごとの分布の様子</h3>
+<p>参考に、数字ごとの分布の様子も見てみる。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python distribution_check.py
+</code></pre></div></div>
+
+<p><img src="distribution_check.png" alt="数字ごとの分布" /></p>
+
+<h3 id="4識別実験">4.識別実験</h3>
+
+<p>10個のHMMのなかで、最大確率を出すものを回答として識別する。　（判定不能となる）最低必要な確率の閾値は設けていない。
+各単語（英語の数字）に含まれる音素数を無視して、すべて同じ隠れ状態数のHMMを使った。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python main.py
+</code></pre></div></div>
+
+<p>特徴量の次元数、ガウス分布の混合の数、HMMの隠れ状態の数を指定できる。　
+発話を均等に隠れ状態数で分割したもののK-MEAN法のクラスタリングのセントロイドをガウス分布の平均値の初期値として使用した。<br />
+Left-to-Rightの1方向で初期化してある。<br />
+<img src="result_sample.png" alt="識別結果の例" /><br />
+訓練用のデータ数が少ないため、HMMのEM計算途中でエラーが発生して　停止することもある。
+Resultディレクトリーに結果がJSONファイルとして出力される。</p>
+
+<h2 id="ライセンス">ライセンス</h2>
+<p>melbank.pyは　それに記載されているライセンスに従うこと。</p>
+
+<h2 id="参照したもの">参照したもの</h2>
+
+<ul>
+  <li><a href="http://hmmlearn.readthedocs.io/en/latest/tutorial.html">Python のHMMライブラリ hmmlearn</a></li>
+  <li><a href="https://github.com/AKBoles/Deep-Learning-Speech-Recognition/blob/master/Pannous-Walkthrough.md">wav of Pannous</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html">Python の主成分分析 scikit learn</a></li>
+  <li><a href="http://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html">Python のクラスタリング scikit learn</a></li>
+</ul>
+
+<h2 id="免責事項">免責事項　</h2>
+
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS 
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<h4 id="上記はmitライセンスからの抜粋です">上記はMITライセンスからの抜粋です。</h4>
+
+
+
+      
+    </div>
+  </body>
+</html>
